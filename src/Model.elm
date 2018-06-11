@@ -1,6 +1,6 @@
 module Model exposing(..)
 
-import User
+import User exposing(UserMsg)
 
 type alias Model = 
     { 
@@ -20,3 +20,4 @@ type Msg
     = NoOp
     | Input String
     | ReverseText
+    | UserMsg UserMsg

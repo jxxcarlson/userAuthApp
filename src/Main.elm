@@ -6,6 +6,7 @@ import Browser
 import Html
 import Model exposing(..)
 import View exposing (view)
+import User exposing(UserMsg)
 
 
 main =
@@ -43,3 +44,10 @@ update msg model =
 
         ReverseText ->
             ( { model | message = model.message |> String.reverse |> String.toLower }, Cmd.none )
+ 
+        UserMsg submessage ->
+            let
+                userModel = model.userModel
+                (nextUserModel, cmd) = User.update  userModel submessage
+            in 
+                ({model | userModel = nextUserModel}, Cmd.map UserMsg cmd)

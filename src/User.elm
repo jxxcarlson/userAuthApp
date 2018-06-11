@@ -22,12 +22,12 @@ type alias User =
    , token : String
   }
 
-type Msg =
+type UserMsg =
    ReceiveAuthorization (Result H.Error User)
   | RequestAuthorization String String 
 
 
-update : Model -> Msg -> (Model, Cmd Msg)
+update : Model -> UserMsg -> (Model, Cmd UserMsg)
 update model msg = 
   case msg of 
     ReceiveAuthorization (Ok user) ->
@@ -57,13 +57,16 @@ authenticationRequest email password =
   H.request
     { method = "Post"
     , headers = []
-    , url = "http://localhost:8000/api/authenticate"
+    , url = "http://localhost:4000/api/users/authenticate"
     , body = H.jsonBody (authorizationEncoder email password)
     , expect = H.expectJson userDecoder
     , timeout = Just 1000
     , withCredentials = False
     }
 
-getAuthorization : String -> String -> Cmd Msg 
+getAuthorization : String -> String -> Cmd UserMsg 
 getAuthorization email password =
-  H.send ReceiveAuthorization <| authenticationRequest email password
+  let 
+    _ = Debug.log "getAuthorization email" email 
+  in 
+    H.send ReceiveAuthorization <| authenticationRequest email password

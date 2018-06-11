@@ -5,6 +5,8 @@ import Html.Attributes exposing (placeholder, style, type_)
 import Html.Events exposing (onClick, onInput)
 import Http
 import Model exposing (..)
+import User
+import Model
 
 
 {- Main view function -}
@@ -14,10 +16,12 @@ view : Model -> Html Msg
 view model =
     div mainStyle
         [ div innerStyle
-            [ label "Skeleton App"
+            [ label "AUTH App"
             , messageDisplay model
             , sampleInput model
             , sampleButton model
+            , authorizationButton model
+            , tokenDisplay model
             ]
         ]
 
@@ -43,6 +47,15 @@ messageDisplay model =
         [ (text model.message) ]
 
 
+tokenDisplay model =
+  let 
+    reply = case model.userModel.maybeUser of 
+      Nothing -> "No token"
+      Just user -> user.firstname ++ ", you are authorized."
+    in 
+    div [ style "margin-top" "10px" ]
+        [ text reply ]
+
 
 {- Inputs -}
 
@@ -60,7 +73,11 @@ sampleButton model =
     div [ style "margin-bottom" "0px" ]
         [ button [ onClick ReverseText ] [ text "Reverse" ] ]
 
+authorizationButton model =
+    div [ style "margin-bottom" "0px" ]
+        [ button [ onClick rq] [ text "Authorization" ] ]
 
+rq = UserMsg <| User.RequestAuthorization "jxxcarlson@gmail.com" "lobo4795"
 
 {- Style -}
 
